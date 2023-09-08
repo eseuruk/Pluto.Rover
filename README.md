@@ -6,7 +6,7 @@ Repository contains code to solve a test task known as 'Pluto Rover Exercise'.
 
 After NASA's New Horizon successfully flew past Pluto, they now plan to land a Pluto Rover
 to further investigate the surface. You are responsible for developing an API that will allow
-the Rover to move around the planet. As you won�t get a chance to fix your code once it is
+the Rover to move around the planet. As you won`t get a chance to fix your code once it is
 onboard, you are expected to use test driven development.
 
 To simplify navigation, the planet has been divided up into a grid. The rover's position and

@@ -1,6 +1,7 @@
 # Pluto Rover
-
 Repository contains code to solve a test task known as 'Pluto Rover Exercise'.
+
+[![Build Status](https://github.com/eseuruk/Pluto.Rover/actions/workflows/build.yml/badge.svg)](https://github.com/eseuruk/Pluto.Rover/actions)
 
 ## The Task
 

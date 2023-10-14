@@ -33,10 +33,18 @@ jobs:
     - name: Test
       run: dotnet test --no-build --logger "trx;LogFileName=test-results.trx"
       
-    - name: Test Report
+    - name: Create Tests Report
       uses: dorny/test-reporter@v1
       if: always()
       with:
-        name: DotNET Tests
-        path: "**/test-results.trx"                            
+        name: Test Results
+        path: "Pluto.Rover.Tests/TestResults/test-results.trx"                            
+        reporter: dotnet-trx
+
+    - name: Create Simulations Report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Simulation Results
+        path: "Pluto.Rover.Simulations/TestResults/test-results.trx"                            
         reporter: dotnet-trx

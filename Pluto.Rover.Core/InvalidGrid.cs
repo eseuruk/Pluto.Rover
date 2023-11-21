@@ -1,17 +1,14 @@
-﻿using System;
+﻿namespace Pluto.Rover.Core;
 
-namespace Pluto.Rover.Core
+public class InvaliddGrid : ICoordinateSystem
 {
-    public class InvaliddGrid : ICoordinateSystem
+    public bool IsPositionValid(Coordinate position)
     {
-        public bool IsPositionValid(Coordinate position)
-        {
-            return false;
-        }
+        return false;
+    }
 
-        public Coordinate Move(Coordinate position, ViewDirection direction, int stepCount)
-        {
-            throw new InvalidOperationException("Movement is not supported");
-        }
+    public Coordinate Move(Coordinate position, ViewDirection direction, int stepCount)
+    {
+        throw new InvalidOperationException("Movement is not supported");
     }
 }

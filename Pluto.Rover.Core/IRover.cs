@@ -1,17 +1,16 @@
-﻿namespace Pluto.Rover.Core
+﻿namespace Pluto.Rover.Core;
+
+public interface IRover
 {
-    public interface IRover
-    {
-        public Coordinate Position { get;  }
+    public Coordinate Position { get;  }
 
-        public ViewDirection Direction { get; }
+    public ViewDirection Direction { get; }
 
-        bool TryMoveForward();
+    bool TryMoveForward();
 
-        bool TryMoveBackward();
+    bool TryMoveBackward();
 
-        void TakeLeft();
+    void TakeLeft();
 
-        void TakeRight();
-    }
+    void TakeRight();
 }

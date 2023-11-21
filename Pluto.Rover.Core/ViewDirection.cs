@@ -1,10 +1,9 @@
-﻿namespace Pluto.Rover.Core
+﻿namespace Pluto.Rover.Core;
+
+public enum ViewDirection
 {
-    public enum ViewDirection
-    {
-        North,
-        West,
-        South,
-        East
-    }
+    North,
+    West,
+    South,
+    East
 }

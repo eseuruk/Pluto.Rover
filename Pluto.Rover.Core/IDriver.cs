@@ -1,9 +1,8 @@
-﻿namespace Pluto.Rover.Core
-{
-    public interface IDriver
-    {
-        IRover Rover { get; }
+﻿namespace Pluto.Rover.Core;
 
-        bool Move(string commands);
-    }
+public interface IDriver
+{
+    IRover Rover { get; }
+
+    bool Move(string commands);
 }

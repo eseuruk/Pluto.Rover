@@ -1,34 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Pluto.Rover.Core;
 
-namespace Pluto.Rover.Core
+public class Planet : IPlanet
 {
-    public class Planet : IPlanet
+    private readonly HashSet<Coordinate> obstacles = new HashSet<Coordinate>();
+
+    public Planet(ICoordinateSystem coordinateSystem)
     {
-        private readonly HashSet<Coordinate> obstacles = new HashSet<Coordinate>();
+        ArgumentNullException.ThrowIfNull(coordinateSystem);
+        CoordinateSystem = coordinateSystem;
+    }
 
-        public Planet(ICoordinateSystem coordinateSystem)
+    public ICoordinateSystem CoordinateSystem { get; }
+
+    public IReadOnlySet<Coordinate> Obstacles { get { return obstacles; } }
+
+    public void AddObstacle(Coordinate position)
+    {
+        if (!CoordinateSystem.IsPositionValid(position))
         {
-            CoordinateSystem = coordinateSystem ?? throw new ArgumentNullException("coordinateSystem");
+            throw new ArgumentOutOfRangeException(nameof(position), position, "Position is invalid in the current coordinate systenm");
         }
 
-        public ICoordinateSystem CoordinateSystem { get; }
+        obstacles.Add(position);
+    }
 
-        public IReadOnlySet<Coordinate> Obstacles { get { return obstacles; } }
-
-        public void AddObstacle(Coordinate position)
-        {
-            if (!CoordinateSystem.IsPositionValid(position))
-            {
-                throw new ArgumentOutOfRangeException("position", position, "Position is invalid in the current coordinate systenm");
-            }
-
-            obstacles.Add(position);
-        }
-
-        public void AddObstacle(int x, int y)
-        {
-            AddObstacle(new Coordinate(x, y));
-        }
+    public void AddObstacle(int x, int y)
+    {
+        AddObstacle(new Coordinate(x, y));
     }
 }

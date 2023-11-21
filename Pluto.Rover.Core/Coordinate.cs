@@ -1,19 +1,18 @@
-﻿namespace Pluto.Rover.Core
+﻿namespace Pluto.Rover.Core;
+
+public record Coordinate
 {
-    public struct Coordinate
+    public int X { get; init; }
+    public int Y { get; init; }
+
+    public Coordinate(int x, int y)
     {
-        public int X { get; }
-        public int Y { get; }
+        X = x;
+        Y = y;
+    }
 
-        public Coordinate(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
-
-        public override string ToString()
-        {
-            return $"{X},{Y}";
-        }
+    public override string ToString()
+    {
+        return $"{X},{Y}";
     }
 }

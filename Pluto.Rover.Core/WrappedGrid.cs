@@ -1,58 +1,55 @@
-﻿using System;
+﻿namespace Pluto.Rover.Core;
 
-namespace Pluto.Rover.Core
+public class WrappedGrid : ICoordinateSystem
 {
-    public class WrappedGrid : ICoordinateSystem
+    public WrappedGrid(int width, int heigth)
     {
-        public WrappedGrid(int width, int heigth)
-        {
-            if (width <= 0) throw new ArgumentOutOfRangeException("width", "Wigth should be greater then zero.");
-            if (heigth <= 0) throw new ArgumentOutOfRangeException("heigth", "Heigth should be greater then zero.");
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(heigth);
 
-            Width = width;
-            Heigth = heigth;
+        Width = width;
+        Heigth = heigth;
+    }
+
+    public int Width { get;  }
+    public int Heigth { get; }
+
+    public bool IsPositionValid(Coordinate position)
+    {
+        return position.X >= 0 && position.X < Width && position.Y >= 0 && position.Y < Heigth;
+    }
+
+    public Coordinate Move(Coordinate position, ViewDirection direction, int stepCount)
+    {
+        if (!IsPositionValid(position))
+        {
+            throw new ArgumentOutOfRangeException(nameof(position), position, "Position is invalid in the current coordinate systenm");
         }
 
-        public int Width { get;  }
-        public int Heigth { get; }
-
-        public bool IsPositionValid(Coordinate position)
+        switch (direction)
         {
-            return position.X >= 0 && position.X < Width && position.Y >= 0 && position.Y < Heigth;
+            case ViewDirection.North:
+                return new Coordinate(position.X, MoveAndRotate(position.Y, Heigth, stepCount));
+            case ViewDirection.West:
+                return new Coordinate(MoveAndRotate(position.X, Width, -stepCount), position.Y);
+            case ViewDirection.South:
+                return new Coordinate(position.X, MoveAndRotate(position.Y, Heigth, -stepCount));
+            case ViewDirection.East:
+                return new Coordinate(MoveAndRotate(position.X, Width, stepCount), position.Y);
+            default:
+                throw new ArgumentOutOfRangeException(nameof(direction), direction, "Unsupported dirrection");
         }
+    }
 
-        public Coordinate Move(Coordinate position, ViewDirection direction, int stepCount)
+    private int MoveAndRotate(int value, int size, int steps)
+    {
+        if (steps == 0) return value;
+        else
         {
-            if (!IsPositionValid(position))
-            {
-                throw new ArgumentOutOfRangeException("position", position, "Position is invalid in the current coordinate systenm");
-            }
+            steps %= size;
+           if (steps < 0) steps += size;
 
-            switch (direction)
-            {
-                case ViewDirection.North:
-                    return new Coordinate(position.X, MoveAndRotate(position.Y, Heigth, stepCount));
-                case ViewDirection.West:
-                    return new Coordinate(MoveAndRotate(position.X, Width, -stepCount), position.Y);
-                case ViewDirection.South:
-                    return new Coordinate(position.X, MoveAndRotate(position.Y, Heigth, -stepCount));
-                case ViewDirection.East:
-                    return new Coordinate(MoveAndRotate(position.X, Width, stepCount), position.Y);
-                default:
-                    throw new ArgumentOutOfRangeException("direction", direction, "Unsupported dirrection");
-            }
-        }
-
-        private int MoveAndRotate(int value, int size, int steps)
-        {
-            if (steps == 0) return value;
-            else
-            {
-                steps %= size;
-               if (steps < 0) steps += size;
-
-                return (value + steps) % size;
-            }
+            return (value + steps) % size;
         }
     }
 }

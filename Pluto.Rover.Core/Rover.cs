@@ -1,72 +1,70 @@
-﻿using System;
+﻿namespace Pluto.Rover.Core;
 
-namespace Pluto.Rover.Core
+public class Rover : IRover
 {
-    public class Rover : IRover
+    private readonly IPlanet planet;
+
+    private Rover(IPlanet planet, Coordinate landngPosition, ViewDirection dirrection)
     {
-        private readonly IPlanet planet;
+        ArgumentNullException.ThrowIfNull(planet);
+        this.planet = planet;
 
-        private Rover(IPlanet planet, Coordinate landngPosition, ViewDirection dirrection)
+        Position = landngPosition;
+        Direction = dirrection;
+    }
+
+    public Coordinate Position { get; private set; }
+
+    public ViewDirection Direction { get; private set; }
+
+    public static IRover Land(IPlanet planet, Coordinate landngPosition, ViewDirection dirrection)
+    {
+        ArgumentNullException.ThrowIfNull(planet);
+
+        if (!planet.CoordinateSystem.IsPositionValid(landngPosition))
         {
-            this.planet = planet ?? throw new ArgumentNullException("planet");
-
-            Position = landngPosition;
-            Direction = dirrection;
+            throw new ArgumentOutOfRangeException(nameof(landngPosition), landngPosition, "Landing position is invalid in the current coordinate systenm");
         }
 
-        public Coordinate Position { get; private set; }
-
-        public ViewDirection Direction { get; private set; }
-
-        public static IRover Land(IPlanet planet, Coordinate landngPosition, ViewDirection dirrection)
+        if (planet.Obstacles.Contains(landngPosition))
         {
-            if (planet == null) throw new ArgumentNullException("planet");
-
-            if (!planet.CoordinateSystem.IsPositionValid(landngPosition))
-            {
-                throw new ArgumentOutOfRangeException("landngPosition", landngPosition, "Landing position is invalid in the current coordinate systenm");
-            }
-
-            if (planet.Obstacles.Contains(landngPosition))
-            {
-                throw new ArgumentOutOfRangeException("landngPosition", landngPosition, "Landing position is blocked by obstacle");
-            }
-
-            return new Rover(planet, landngPosition, dirrection);
+            throw new ArgumentOutOfRangeException(nameof(landngPosition), landngPosition, "Landing position is blocked by obstacle");
         }
 
-        public bool TryMoveForward()
-        {
-            var newPosition = planet.CoordinateSystem.Move(Position, Direction, 1);
-            if (planet.Obstacles.Contains(newPosition))
-            {
-                return false;
-            }
+        return new Rover(planet, landngPosition, dirrection);
+    }
 
-            Position = newPosition;
-            return true;
+    public bool TryMoveForward()
+    {
+        var newPosition = planet.CoordinateSystem.Move(Position, Direction, 1);
+        if (planet.Obstacles.Contains(newPosition))
+        {
+            return false;
         }
 
-        public bool TryMoveBackward()
-        {
-            var newPosition = planet.CoordinateSystem.Move(Position, Direction, -1);
-            if (planet.Obstacles.Contains(newPosition))
-            {
-                return false;
-            }
+        Position = newPosition;
+        return true;
+    }
 
-            Position = newPosition;
-            return true;
+    public bool TryMoveBackward()
+    {
+        var newPosition = planet.CoordinateSystem.Move(Position, Direction, -1);
+        if (planet.Obstacles.Contains(newPosition))
+        {
+            return false;
         }
 
-        public void TakeLeft()
-        {
-            Direction = Direction.TakeLeft();
-        }
+        Position = newPosition;
+        return true;
+    }
 
-        public void TakeRight()
-        {
-            Direction = Direction.TakeRight();
-        }
+    public void TakeLeft()
+    {
+        Direction = Direction.TakeLeft();
+    }
+
+    public void TakeRight()
+    {
+        Direction = Direction.TakeRight();
     }
 }

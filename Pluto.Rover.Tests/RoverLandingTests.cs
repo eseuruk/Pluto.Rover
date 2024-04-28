@@ -18,13 +18,16 @@ public class RoverLandingTests
     [TestCase(10, 20, ViewDirection.East)]
     public void SuccessfulLanding(int landingX, int landingY, ViewDirection direction)
     {
+        var landingPosition = new Coordinate(landingX, landingY);
         var planet = CreatePlanetWithInfinitGrid();
     
-        var rover = Core.Rover.Land(planet, new Coordinate(landingX, landingY), direction);
+        var rover = Core.Rover.Land(planet, landingPosition, direction);
 
-        Assert.That(rover.Position.X, Is.EqualTo(landingX), "Should land at X position");
-        Assert.That(rover.Position.Y, Is.EqualTo(landingY), "Should land at Y position");
-        Assert.That(rover.Direction, Is.EqualTo(direction), "Should land with direction");
+        Assert.Multiple(() =>
+        {
+            Assert.That(rover.Position, Is.EqualTo(landingPosition), "Should land at position");
+            Assert.That(rover.Direction, Is.EqualTo(direction), "Should land with direction");
+        });
     }
 
     [TestCase(ViewDirection.North)]

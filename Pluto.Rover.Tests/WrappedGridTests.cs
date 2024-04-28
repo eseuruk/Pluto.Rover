@@ -24,13 +24,13 @@ public class WrappedGridTests
     [TestCase(50, 50, ViewDirection.East, 1, 51, 50)]
     public void MoveForward(int currentX, int currentY, ViewDirection dirrection, int stepCount, int expectedX, int expectedY)
     {
-        var grid = new WrappedGrid(100, 100);
         var currentPosition = new Coordinate(currentX, currentY);
+        var expectedPosition = new Coordinate(expectedX, expectedY);
 
+        var grid = new WrappedGrid(100, 100);
         var newPosition = grid.Move(currentPosition, dirrection, stepCount);
 
-        Assert.That(newPosition.X, Is.EqualTo(expectedX));
-        Assert.That(newPosition.Y, Is.EqualTo(expectedY));
+        Assert.That(newPosition, Is.EqualTo(expectedPosition));
     }
 
     [TestCase(0, 99, ViewDirection.North, 1, 0, 0)]
@@ -49,13 +49,13 @@ public class WrappedGridTests
     [TestCase(99, 0, ViewDirection.East, 201, 0, 0)]
     public void MoveForwardWithRotation(int currentX, int currentY, ViewDirection dirrection, int stepCount, int expectedX, int expectedY)
     {
-        var grid = new WrappedGrid(100, 100);
         var currentPosition = new Coordinate(currentX, currentY);
+        var expectedPosition = new Coordinate(expectedX, expectedY);
 
+        var grid = new WrappedGrid(100, 100);
         var newPosition = grid.Move(currentPosition, dirrection, stepCount);
 
-        Assert.That(newPosition.X, Is.EqualTo(expectedX));
-        Assert.That(newPosition.Y, Is.EqualTo(expectedY));
+        Assert.That(newPosition, Is.EqualTo(expectedPosition));
     }
 
     [TestCase(50, 50, ViewDirection.North, 1, 50, 49)]
@@ -64,13 +64,13 @@ public class WrappedGridTests
     [TestCase(50, 50, ViewDirection.East, 1, 49, 50)]
     public void MoveBackwards(int currentX, int currentY, ViewDirection direction, int stepCount, int expectedX, int expectedY)
     {
-        var grid = new WrappedGrid(100, 100);
         var currentPosition = new Coordinate(currentX, currentY);
+        var expectedPosition = new Coordinate(expectedX, expectedY);
 
+        var grid = new WrappedGrid(100, 100);
         var newPosition = grid.Move(currentPosition, direction, -stepCount);
 
-        Assert.That(newPosition.X, Is.EqualTo(expectedX));
-        Assert.That(newPosition.Y, Is.EqualTo(expectedY));
+        Assert.That(newPosition, Is.EqualTo(expectedPosition));
     }
 
     [TestCase(0, 0, ViewDirection.North, 1, 0, 99)]
@@ -89,12 +89,12 @@ public class WrappedGridTests
     [TestCase(0, 0, ViewDirection.East, 201, 99, 0)]
     public void MoveBackwardsWithRotation(int currentX, int currentY, ViewDirection direction, int stepCount, int expectedX, int expectedY)
     {
-        var grid = new WrappedGrid(100, 100);
         var currentPosition = new Coordinate(currentX, currentY);
+        var expectedPosition = new Coordinate(expectedX, expectedY);
 
+        var grid = new WrappedGrid(100, 100);
         var newPosition = grid.Move(currentPosition, direction, -stepCount);
 
-        Assert.That(newPosition.X, Is.EqualTo(expectedX));
-        Assert.That(newPosition.Y, Is.EqualTo(expectedY));
+        Assert.That(newPosition, Is.EqualTo(expectedPosition));
     }
 }

@@ -16,9 +16,11 @@ public class MoveSimulations
 
         driver.Move("");
 
-        Assert.That(rover.Position.X, Is.EqualTo(landingPosition.X), "X position should not change");
-        Assert.That(rover.Position.Y, Is.EqualTo(landingPosition.Y), "Y position should not change");
-        Assert.That(rover.Direction, Is.EqualTo(direction), "Direction should not change");
+        Assert.Multiple(() =>
+        {
+            Assert.That(rover.Position, Is.EqualTo(landingPosition), "Position should not change");
+            Assert.That(rover.Direction, Is.EqualTo(direction), "Direction should not change");
+        });
     }
 
     [TestCase(ViewDirection.North, "L", ViewDirection.West)]
@@ -58,9 +60,11 @@ public class MoveSimulations
 
         driver.Move(commands);
 
-        Assert.That(rover.Position.X, Is.EqualTo(landingPosition.X), "X position should not change");
-        Assert.That(rover.Position.Y, Is.EqualTo(landingPosition.Y), "Y position should not change");
-        Assert.That(rover.Direction, Is.EqualTo(expectedDirection), "Should finish with direction");
+        Assert.Multiple(() =>
+        {
+            Assert.That(rover.Position, Is.EqualTo(landingPosition), "Position should not change");
+            Assert.That(rover.Direction, Is.EqualTo(expectedDirection), "Should finish with direction");
+        });
     }
 
 
@@ -72,6 +76,7 @@ public class MoveSimulations
     public void MoveForward(int landingX, int landingY, ViewDirection direction, int stepsCount, int expectedX, int expectedY)
     {
         var landingPosition = new Coordinate(landingX, landingY);
+        var expectedPosition = new Coordinate(expectedX, expectedY);
         var commands = new string('F', stepsCount);
 
         var planet = SimulationContext.CreatePlanet();
@@ -80,9 +85,11 @@ public class MoveSimulations
 
         driver.Move(commands);
 
-        Assert.That(rover.Position.X, Is.EqualTo(expectedX), "Should finish at X position");
-        Assert.That(rover.Position.Y, Is.EqualTo(expectedY), "Should finish at Y position");
-        Assert.That(rover.Direction, Is.EqualTo(direction), "Direction should not change");
+        Assert.Multiple(() =>
+        {
+            Assert.That(rover.Position, Is.EqualTo(expectedPosition), "Should finish at position");
+            Assert.That(rover.Direction, Is.EqualTo(direction), "Direction should not change");
+        });
     }
 
     [TestCase(50, 50, ViewDirection.North, 5, 50, 45)]
@@ -93,6 +100,7 @@ public class MoveSimulations
     public void MoveBackward(int landingX, int landingY, ViewDirection direction, int stepsCount, int expectedX, int expectedY)
     {
         var landingPosition = new Coordinate(landingX, landingY);
+        var expectedPosition = new Coordinate(expectedX, expectedY);
         var commands = new string('B', stepsCount);
 
         var planet = SimulationContext.CreatePlanet();
@@ -101,9 +109,11 @@ public class MoveSimulations
 
         driver.Move(commands);
 
-        Assert.That(rover.Position.X, Is.EqualTo(expectedX), "Should finish at X position");
-        Assert.That(rover.Position.Y, Is.EqualTo(expectedY), "Should finish at Y position");
-        Assert.That(rover.Direction, Is.EqualTo(direction), "Direction should not change");
+        Assert.Multiple(() =>
+        {
+            Assert.That(rover.Position, Is.EqualTo(expectedPosition), "Should finish at position");
+            Assert.That(rover.Direction, Is.EqualTo(direction), "Direction should not change");
+        });
     }
 
     [TestCase(50, 50, ViewDirection.North)]
@@ -122,9 +132,11 @@ public class MoveSimulations
 
         driver.Move(commands);
 
-        Assert.That(rover.Position.X, Is.EqualTo(landingX), "Should finish at X position");
-        Assert.That(rover.Position.Y, Is.EqualTo(landingY), "Should finish at Y position");
-        Assert.That(rover.Direction, Is.EqualTo(direction), "Should finish with direction");
+        Assert.Multiple(() =>
+        {
+            Assert.That(rover.Position, Is.EqualTo(landingPosition), "Should finish at position");
+            Assert.That(rover.Direction, Is.EqualTo(direction), "Should finish with direction");
+        });
     }
 
     [TestCase(50, 50, ViewDirection.North)]
@@ -143,9 +155,11 @@ public class MoveSimulations
 
         driver.Move(commands);
 
-        Assert.That(rover.Position.X, Is.EqualTo(landingX), "Should finish at X position");
-        Assert.That(rover.Position.Y, Is.EqualTo(landingY), "Should finish at Y position");
-        Assert.That(rover.Direction, Is.EqualTo(direction), "Should finish with direction");
+        Assert.Multiple(() =>
+        {
+            Assert.That(rover.Position, Is.EqualTo(landingPosition), "Should finish at position");
+            Assert.That(rover.Direction, Is.EqualTo(direction), "Should finish with direction");
+        });
     }
 
 
@@ -155,6 +169,7 @@ public class MoveSimulations
     public void FreeMove(int landingX, int landingY, ViewDirection direction, string commands, int expectedX, int expectedY, ViewDirection expectedDirection)
     {
         var landingPosition = new Coordinate(landingX, landingY);
+        var expectedPosition = new Coordinate(expectedX, expectedY);
 
         var planet = SimulationContext.CreatePlanet();
         var rover = Core.Rover.Land(planet, landingPosition, direction);
@@ -162,8 +177,10 @@ public class MoveSimulations
 
         driver.Move(commands);
 
-        Assert.That(rover.Position.X, Is.EqualTo(expectedX), "Should finish at X position");
-        Assert.That(rover.Position.Y, Is.EqualTo(expectedY), "Should finish at Y position");
-        Assert.That(rover.Direction, Is.EqualTo(expectedDirection), "Should finish with direction");
+        Assert.Multiple(() =>
+        {
+            Assert.That(rover.Position, Is.EqualTo(expectedPosition), "Should finish at position");
+            Assert.That(rover.Direction, Is.EqualTo(expectedDirection), "Should finish with direction");
+        });
     }
 }

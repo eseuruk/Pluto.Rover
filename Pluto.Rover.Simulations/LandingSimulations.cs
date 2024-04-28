@@ -28,13 +28,16 @@ public class LandingSimulations
     [TestCase(99, 99, ViewDirection.East)]
     public void SuccessfulLanding(int landingX, int landingY, ViewDirection direction)
     {
+        var landingPosition = new Coordinate(landingX, landingY);
         var planet = SimulationContext.CreatePlanet();
 
-        var rover = Core.Rover.Land(planet, new Coordinate(landingX, landingY), direction);
+        var rover = Core.Rover.Land(planet, landingPosition, direction);
 
-        Assert.That(rover.Position.X, Is.EqualTo(landingX), "Should land at X position");
-        Assert.That(rover.Position.Y, Is.EqualTo(landingY), "Should land at Y position");
-        Assert.That(rover.Direction, Is.EqualTo(direction), "Should land with direction");
+        Assert.Multiple(() =>
+        {
+            Assert.That(rover.Position, Is.EqualTo(landingPosition), "Should land at position");
+            Assert.That(rover.Direction, Is.EqualTo(direction), "Should land with direction");
+        });
     }
 
     [TestCase(-1, -1, ViewDirection.North)]
@@ -69,9 +72,10 @@ public class LandingSimulations
 
     public void FailedLandingAtInvalidPostion(int landingX, int landingY, ViewDirection direction)
     {
+        var landingPosition = new Coordinate(landingX, landingY);
         var planet = SimulationContext.CreatePlanet();
 
-        Assert.Throws<ArgumentOutOfRangeException>(() => Core.Rover.Land(planet, new Coordinate(landingX, landingY), direction));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Core.Rover.Land(planet, landingPosition, direction));
     }
 
     [TestCase(ViewDirection.North)]

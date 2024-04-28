@@ -41,21 +41,21 @@ Here is an example:
 * **Pluto.Rover.Simulations** project contains simulations of the rover behaviour in the real environment (100x100 wrapped grid planet). 
 
 ## Dependencies
-* .NET 6.0 LTS
+* .NET 8.0 LTS
 * Nunit 3
 * Moq 4 
 
 ## How to select coordinate system
 
 Coordinate system of the planet is represented by:
+```csharp
+public interface ICoordinateSystem
+{
+    bool IsPositionValid(Coordinate c);
 
-    public interface ICoordinateSystem
-    {
-        bool IsPositionValid(Coordinate c);
-
-        Coordinate Move(Coordinate position, ViewDirection direction, int stepCount);
-    }
-
+    Coordinate Move(Coordinate position, ViewDirection direction, int stepCount);
+}
+```
 There are predefined implementations available:
 * *InfiniteGrid* which represents infinite grid with all valid cells.
 * *IvalidGrid* which represents infinite grid with all invalid cells. (Used mostly for testing)
@@ -64,45 +64,44 @@ There are predefined implementations available:
 ## How to create the planet
 
 To create the planet with wrapped grid coordinate system:
-
-    var grid = new WrappedGrid(GridWidth, GridHeigth);
-    var planet = new Planet(grid);
-
+```csharp
+var grid = new WrappedGrid(GridWidth, GridHeigth);
+var planet = new Planet(grid);
+```
 To add the obstacles:
-
-    panet.AddObstacle(5, 100);
-    panet.AddObstacle(20, 120);
-
-
+```csharp
+panet.AddObstacle(5, 100);
+panet.AddObstacle(20, 120);
+```
 Coordinate of the obstacle should be valid in the selected coordinate system. In other case exception is thrown.
 
 ## How to land the rover
 
 To get access to the rover object it should be landed onto the planet surface.
-
-    var rover = Rover.Land(planet, landingPosition, initialDirection);
-
+```csharp
+var rover = Rover.Land(planet, landingPosition, initialDirection);
+```
 If landing position is invalid or contains an obstacle, then the rover is not landed and exception is thrown.
 
 ## How to move the rover
 
 As rover is landed it might be controlled via IRover interface:
+```csharp
+public interface IRover
+{
+    public Coordinate Position { get; }
 
-    public interface IRover
-    {
-        public Coordinate Position { get; }
+    public ViewDirection Direction { get; }
 
-        public ViewDirection Direction { get; }
+    bool TryMoveForward();
 
-        bool TryMoveForward();
+    bool TryMoveBackward();
 
-        bool TryMoveBackward();
+    void TakeLeft();
 
-        void TakeLeft();
-
-        void TakeRight();
-    }
-
+    void TakeRight();
+}
+```
 *Position* and *Direction* properties describe the current state of the rover and are changed only after the successful movement.
 
 *TryMoveForward* and *TryMoveBackward* operations may return false if they are blocked by the obstacle in the destination location. 
@@ -111,10 +110,10 @@ In this case position of the rover is not changed.
 ## How to control the rover via commands 
 
 To control the rover via string commands:
-
-    var driver = new Driver(rover);
-    driver.Move("FFRFRBBLL")
-
+```csharp
+var driver = new Driver(rover);
+driver.Move("FFRFRBBLL")
+```
 Driver translates string commands into the sequence of Rover operations:
 * 'F' to call TryMoveForward()
 * 'B' to call TryMoveBackward()
@@ -124,5 +123,3 @@ Driver translates string commands into the sequence of Rover operations:
 Any unrecognised command causes an exception. All commands before are executed and Rover stops.
 
 If rover is blocked by an obstacle, then commands are executed till the last possible step. 
-
-

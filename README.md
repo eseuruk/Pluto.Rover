@@ -42,7 +42,7 @@ Here is an example:
 
 ## Dependencies
 * .NET 8.0 LTS
-* Nunit 3
+* Nunit 4
 * Moq 4 
 
 ## How to select coordinate system
